@@ -90,7 +90,7 @@
         <property name="unauthorizedUrl" value="/401"/>
 
 
-        <property name="filterChainDefinitionMap" ref="filterChainDefinition"/>
+        <!--<property name="filterChainDefinitionMap" ref="filterChainDefinition"/>-->
 
 
 
@@ -110,7 +110,9 @@
     <!--使用工厂模式实现FactoryBea<T>接口，动态创建URL和权限的关系-->
     <!--配置该项之后，上面的《property》就不再需要-->
     <bean id="filterChainDefinition" class="com.kaishengit.tms.shiro.MyFilterChainDefinition">
-        <property name="filterChainDefinition">
+        
+        <property name="shiroFilter" ref="shiroFilter"/>
+        <property name="filterChainDefinitions">
             <value>
                 /favicon.ico = anon
                 /static/** = anon

@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kaishengit.tms.entity.*;
+import com.kaishengit.tms.exception.ServiceException;
 import com.kaishengit.tms.mapper.PermissionMapper;
 import com.kaishengit.tms.mapper.PermissionRolesMapper;
 import com.kaishengit.tms.mapper.RolesMapper;
@@ -108,15 +109,16 @@ public class RolePermissionServiceImpl implements RolePermissionService{
         roles.setCreatTime(new Date());
         rolesMapper.insertSelective(roles);
 
-        //保存角色和权限的关系
-        for(Integer id : permissionId) {
-            PermissionRolesKey permissionRolesKey = new PermissionRolesKey();
-            permissionRolesKey.setPermissionId(id);
-            permissionRolesKey.setRolesId(roles.getId());
+        if(permissionId != null) {
+            //保存角色和权限的关系
+            for (Integer id : permissionId) {
+                PermissionRolesKey permissionRolesKey = new PermissionRolesKey();
+                permissionRolesKey.setPermissionId(id);
+                permissionRolesKey.setRolesId(roles.getId());
 
-            permissionRolesMapper.insert(permissionRolesKey);
+                permissionRolesMapper.insert(permissionRolesKey);
+            }
         }
-
         logger.info("新增角色 {}",roles);
 
     }
@@ -143,16 +145,34 @@ public class RolePermissionServiceImpl implements RolePermissionService{
     }
 
     /**
-     * 删除权限
+     * 根据权限ID删除权限
      *
      * @param id 权限ID
      */
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public void delPermissionById(Integer id) {
         //需要判断当前权限是否有子权限
+        PermissionExample permissionExample = new PermissionExample();
+        permissionExample.createCriteria().andParentIdEqualTo(id);
+
+        List<Permission> permissionList = permissionMapper.selectByExample(permissionExample);
+        if(permissionList != null && !permissionList.isEmpty()) {
+            throw new ServiceException("该权限包含子权限，请先删除子权限");
+        }
 
         //需要查询该权限是否已被角色使用
+        PermissionRolesExample permissionRolesExample = new PermissionRolesExample();
+        permissionRolesExample.createCriteria().andPermissionIdEqualTo(id);
+
+        List<PermissionRolesKey> permissionRolesKeys = permissionRolesMapper.selectByExample(permissionRolesExample);
+        if(permissionRolesKeys != null && !permissionRolesKeys.isEmpty()) {
+            throw new ServiceException("该权限已被角色使用，无法删除");
+        }
+
         permissionMapper.deleteByPrimaryKey(id);
+
+        logger.info("删除权限 {}",permissionMapper.selectByPrimaryKey(id));
     }
 
     /**

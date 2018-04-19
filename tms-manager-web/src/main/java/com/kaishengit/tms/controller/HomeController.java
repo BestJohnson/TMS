@@ -40,8 +40,6 @@ public class HomeController  {
     public String home() {
         Subject subject = SecurityUtils.getSubject();
 
-        System.out.println("isAuthenticated()?" + subject.isAuthenticated());
-        System.out.println("isRemembered()?" + subject.isRemembered());
 
         //判断当前账户是否是被认证的的，是的话则退出
         if(subject.isAuthenticated()) {

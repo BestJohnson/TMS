@@ -99,6 +99,24 @@
 <script>
     $(function() {
         $(".tree").treegrid();
+
+        $(".delLink").click(function(){
+            var id = $(this).attr("rel");
+            layer.confirm("确定要删除吗？",function(index){
+                layer.close(index);
+                $.get("/manage/permission/" + id + "/del").done(function (result) {
+                    if(result.status == 'success') {
+                        history.go(0);
+                    } else {
+                        layer.msg(result.message);
+                    }
+                }).error(function () {
+                        layer.msg("服务器忙");
+                });
+            })
+        });
+
+
     })
 </script>
 </body>

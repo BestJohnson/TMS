@@ -4,6 +4,7 @@ import com.kaishengit.tms.dto.ResponseBean;
 import com.kaishengit.tms.entity.Permission;
 import com.kaishengit.tms.exception.ServiceException;
 import com.kaishengit.tms.service.RolePermissionService;
+import com.kaishengit.tms.shiro.MyFilterChainDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,8 @@ public class PermissionController {
 
     @Autowired
     private RolePermissionService rolePermissionService;
+    @Autowired
+    private MyFilterChainDefinition myFilterChainDefinition;
 
 
     @GetMapping
@@ -43,16 +46,24 @@ public class PermissionController {
     public String addPermission(Permission permission,
                                 RedirectAttributes redirectAttributes) {
         rolePermissionService.addPermission(permission);
+
+        //新增之后刷新shiro权限
+        myFilterChainDefinition.update();
+
         redirectAttributes.addFlashAttribute("message","新增成功");
         return "redirect:/manage/permission";
     }
 
-    @GetMapping("/{id:\\d+}del")
+    @GetMapping("/{id:\\d+}/del")
     @ResponseBody
     public ResponseBean delPermission(@PathVariable Integer id) {
         try {
-
+            System.out.println("id"+id);
             rolePermissionService.delPermissionById(id);
+
+            //删除之后刷新shiro权限
+            myFilterChainDefinition.update();
+
             return ResponseBean.success();
         } catch (ServiceException ex) {
             return ResponseBean.error(ex.getMessage());
