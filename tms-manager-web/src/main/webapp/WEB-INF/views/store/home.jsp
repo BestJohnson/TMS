@@ -35,6 +35,7 @@
 
         <!-- Main content -->
         <section class="content">
+
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">销售点列表</h3>
