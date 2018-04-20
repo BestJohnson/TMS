@@ -26,9 +26,11 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                权限管理
-            </h1>
+            <shiro:hasRole name="admin || superadmin">
+                <h1>
+                    权限管理
+                </h1>
+            </shiro:hasRole>
         </section>
 
         <!-- Main content -->
@@ -37,7 +39,9 @@
                 <div class="box-head ">
                     <h3 class="box-title">权限列表</h3>
                     <div class="box-tools">
-                        <a href="/manage/permission/new" class="btn btn-info pull-right ">增加权限</a>
+                        <shiro:hasPermission name="add:permission">
+                            <a href="/manage/permission/new" class="btn btn-info pull-right ">增加权限</a>
+                        </shiro:hasPermission>
                     </div>
                 </div>
                 <div class="box-body">
