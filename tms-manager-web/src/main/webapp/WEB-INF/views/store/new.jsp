@@ -48,6 +48,9 @@
                 <div class="box-header">
                     <h3 class="box-title">新增销售点</h3>
                 </div>
+                <c:if test="${message not empty}">
+                    <p class="login-box-msg text-success">${message}</p>
+                </c:if>
                 <div class="box-body">
                     <form method="post" id="saveForm">
                         <input type="hidden" id="managerAttachment" name="managerAttachment">
