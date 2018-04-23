@@ -6,7 +6,7 @@ import com.kaishengit.tms.entity.TicketStore;
 import java.util.List;
 
 /**
- * 年票业务类接口
+ * 年票销售点业务类接口
  */
 public interface TicketStoreService {
 

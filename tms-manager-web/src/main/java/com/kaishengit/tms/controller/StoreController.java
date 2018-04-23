@@ -102,11 +102,11 @@ public class StoreController {
         return "redirect:/ticketstore";
     }
 
-    @GetMapping("/disable")
+    @GetMapping("/{id:\\d+}/disable")
     public String disableStore(@PathVariable Integer id) {
         ticketStoreService.disableStoreAccountById(id);
 
-        return "/ticketstore";
+        return "redirect:/ticketstore";
     }
 
 

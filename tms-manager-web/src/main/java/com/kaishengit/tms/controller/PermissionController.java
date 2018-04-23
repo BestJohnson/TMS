@@ -54,11 +54,24 @@ public class PermissionController {
         return "redirect:/manage/permission";
     }
 
+    @GetMapping("/{id:\\d+}/edit")
+    public String editPermission(@PathVariable Integer id,Model model) {
+        Permission permission = rolePermissionService.findPermissionById(id);
+        model.addAttribute(permission);
+        return "manage/permission/edit";
+    }
+
+    @PostMapping("/{id:\\d+}/edit")
+    public String editPermission(Permission permission) {
+        rolePermissionService.updatePermission(permission);
+        return "redirect:/manage/permission";
+    }
+
+
     @GetMapping("/{id:\\d+}/del")
     @ResponseBody
     public ResponseBean delPermission(@PathVariable Integer id) {
         try {
-            System.out.println("id"+id);
             rolePermissionService.delPermissionById(id);
 
             //删除之后刷新shiro权限

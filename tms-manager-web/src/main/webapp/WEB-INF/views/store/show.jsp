@@ -76,7 +76,7 @@
                 <div class="box-header">
                     <h3 class="box-title">关联账号</h3>
                     <div class="box-tools">
-                        <a href="/ticketstore/diable;" rel="${ticketStore.id}" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i> 禁用账号</a>
+                        <a href="/ticketstore/${ticketStore.id}/disable;" rel="${ticketStore.id}" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i> 禁用账号</a>
                     </div>
                 </div>
                 <div class="box-body">

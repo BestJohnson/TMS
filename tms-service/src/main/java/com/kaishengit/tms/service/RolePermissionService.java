@@ -67,4 +67,17 @@ public interface RolePermissionService {
      * @return
      */
     List<Permission> findAllPermissionByRolesId(Integer id);
+
+    /**
+     * 根据ID查找对应的权限
+     * @param id
+     * @return
+     */
+    Permission findPermissionById(Integer id);
+
+    /**
+     * 修改权限
+     * @param permission
+     */
+    void updatePermission(Permission permission);
 }

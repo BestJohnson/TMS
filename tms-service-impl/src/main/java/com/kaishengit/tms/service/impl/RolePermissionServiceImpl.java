@@ -197,5 +197,27 @@ public class RolePermissionServiceImpl implements RolePermissionService{
         return permissionMapper.findAllByRolesId(id);
     }
 
+    /**
+     * 根据ID查找对应的权限
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Permission findPermissionById(Integer id) {
+        return permissionMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 修改权限
+     *
+     * @param permission
+     */
+    @Override
+    public void updatePermission(Permission permission) {
+        permission.setUpdateTime(new Date());
+        permissionMapper.updateByPrimaryKeySelective(permission);
+    }
+
 
 }

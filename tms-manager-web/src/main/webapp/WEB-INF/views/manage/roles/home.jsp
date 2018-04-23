@@ -40,9 +40,7 @@
                 <div class="box-header">
                     <h3 class="box-title">角色列表</h3>
                     <div class="box-tools">
-                        <shiro:hasRole name="superadmin">
                             <a href="/manage/roles/new" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> 新增角色</a>
-                        </shiro:hasRole>
                     </div>
                 </div>
                 <div class="box-body">
@@ -56,10 +54,8 @@
                                             <a style="color: #fff;" href="/manage/roles/${roles.id}/edit"><i class="fa fa-pencil"></i></a>
                                             <a style="color: #fff;" class="delLink" rel="${roles.id}" href="javascript:;"><i class="fa fa-trash"></i></a>
                                         </span>--%>
-                                        <shiro:hasRole name="admin || superadmin">
                                             <a class="btn btn-danger btn-xs pull-right delLink" rel="${roles.id}" href="javascript:;"><i class="fa fa-trash"></i></a>
                                             <a class="btn btn-primary btn-xs pull-right " href="/manage/roles/${roles.id}/edit"><i class="fa fa-pencil"></i></a>
-                                        </shiro:hasRole>
                                     </td>
                                 </tr>
                                 <tr>

@@ -137,9 +137,13 @@ public class TicketStoreServiceImpl implements TicketStoreService {
      */
     @Override
     public void disableStoreAccountById(Integer id) {
-        StoreAccount storeAccount = storeAccountMapper.selectByPrimaryKey(id);
+
+        TicketStore ticketStore = ticketStoreMapper.selectByPrimaryKey(id);
+        StoreAccount storeAccount = storeAccountMapper.selectByPrimaryKey(ticketStore.getStoreAccountId());
+
         if(storeAccount != null) {
             storeAccount.setStoreState(StoreAccount.ACCOUNT_STATE_DISABLE);
+            storeAccountMapper.updateByPrimaryKeySelective(storeAccount);
         }
     }
 
