@@ -13,11 +13,11 @@
                 <li class="header">库存管理</li>
                 <li class="${param.menu == 'ticket_storage' ? 'active' : ''}"><a href="/ticket/storage"><i class="fa fa-circle-o"></i><span>年票入库</span></a></li>
                 <li class="${param.menu == 'ticket_out_storage' ? 'active' : ''}"><a href="/ticket/out/storage"><i class="fa fa-circle-o"></i><span>年票下发</span></a></li>
-                <li class="${param.menu == 'ticket_storage' ? 'active' : ''}"><a href="/manage/"><i class="fa fa-circle-o"></i><span>年票作废</span></a></li>
-                <li class="${param.menu == 'ticket_storage' ? 'active' : ''}"><a href="/manage/"><i class="fa fa-circle-o"></i><span>盘点统计</span></a></li>
+                <li ><a href="/manage/"><i class="fa fa-circle-o"></i><span>年票作废</span></a></li>
+                <li ><a href="/manage/"><i class="fa fa-circle-o"></i><span>盘点统计</span></a></li>
             </shiro:hasRole>
                 <li class="header">财务管理</li>
-                <li><a href="/manage/"><i class="fa fa-circle-o"></i><span>售票点缴费</span></a></li>
+                <li class="${param.menu == 'finance_ticket' ? 'active' : ''}"><a href="/finance/ticket"><i class="fa fa-circle-o"></i><span>售票点缴费</span></a></li>
                 <li><a href="/manage/"><i class="fa fa-circle-o"></i><span>景区结算</span></a></li>
                 <li><a href="/manage/"><i class="fa fa-circle-o"></i><span>销售统计</span></a></li>
                 <li><a href="/manage/"><i class="fa fa-circle-o"></i><span>验票统计</span></a></li>

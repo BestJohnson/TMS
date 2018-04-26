@@ -7,14 +7,14 @@ import java.util.Date;
  * @author 
  */
 public class Ticket implements Serializable {
+
     public static final String TICKET_STATE_IN_STORE = "已入库";
-    public static final String TICKET_STATE_SALE = "已下发";
+    public static final String TICKET_STATE_OUT_STORE = "已下发";
     public static final String TICKET_STATE_MISS = "已挂失";
     public static final String TICKET_STATE_DISABLED = "已作废";
 
 
-
-    private Long id;
+    private Integer id;
 
     private String ticketNum;
 
@@ -34,15 +34,15 @@ public class Ticket implements Serializable {
 
     private Date ticketValidityEnd;
 
-    private Long customerId;
+    private Integer customerId;
 
     private static final long serialVersionUID = 1L;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -118,11 +118,11 @@ public class Ticket implements Serializable {
         this.ticketValidityEnd = ticketValidityEnd;
     }
 
-    public Long getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 }

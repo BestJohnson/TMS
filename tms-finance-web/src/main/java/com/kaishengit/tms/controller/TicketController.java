@@ -1,6 +1,7 @@
 package com.kaishengit.tms.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.kaishengit.tms.dto.ResponseBean;
 import com.kaishengit.tms.entity.TicketInRecord;
 import com.kaishengit.tms.entity.TicketOutRecord;
 import com.kaishengit.tms.entity.TicketStore;
@@ -94,6 +95,7 @@ public class TicketController {
     @GetMapping("/out/storage")
     public String outStorage(Model model,
                              @RequestParam(defaultValue = "1",name = "p",required = false) Integer pageNo) {
+
         PageInfo<TicketOutRecord> pageInfo = ticketService.findAllTicketOutRecordByPageNo(pageNo);
         model.addAttribute("page",pageInfo);
         return "outStorage/home";
@@ -115,6 +117,13 @@ public class TicketController {
     public String newOutStorage(TicketOutRecord ticketOutRecord) {
         ticketService.addTicketOutRecord(ticketOutRecord);
         return "redirect:/ticket/out/storage";
+    }
+
+    @GetMapping("/out/storage/{id:\\d+}/del")
+    public @ResponseBody  ResponseBean delOutStorage(@PathVariable Integer id) {
+        ticketService.delTicketOutStorage(id);
+
+        return ResponseBean.success();
     }
 
 

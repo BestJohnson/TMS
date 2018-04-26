@@ -7,18 +7,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>TMS | 年票入库</title>
-    <%@include file="../include/css.jsp"%>
+    <%@include file="../../include/css.jsp"%>
 </head>
 <body class="hold-transition skin-purple sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
 
-    <%@include file="../include/head.jsp"%>
+    <%@include file="../../include/head.jsp"%>
 
     <!-- =============================================== -->
 
-    <jsp:include page="../include/sider.jsp">
-        <jsp:param name="menu" value="ticket_out_storage"/>
+    <jsp:include page="../../include/sider.jsp">
+        <jsp:param name="menu" value="finance_ticket"/>
     </jsp:include>
 
     <!-- =============================================== -->
@@ -28,7 +28,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                年票下发
+                年票缴费
             </h1>
         </section>
 
@@ -76,7 +76,7 @@
                                 <td>${ticketOutRecord.accountName}</td>
                                 <td>
                                     <c:if test="${ticketOutRecord.state == '未支付'}">
-                                        <a class="btn btn-danger btn-xs delLink" rel="${ticketOutRecord.id}" href="javascript:;" title="删除"><i class="fa fa-trash"></i></a>
+                                        <a href="/finance/${ticketOutRecord.id}/pay" class="btn btn-sm btn-success">支付</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -95,7 +95,7 @@
 </div>
 <!-- ./wrapper -->
 
-<%@include file="../include/js.jsp"%>
+<%@include file="../../include/js.jsp"%>
 <script src="/static/plugins/page/jquery.twbsPagination.min.js"></script>
 <script src="/static/plugins/layer/layer.js"></script>
 <script>
@@ -111,25 +111,6 @@
             href : "?p={{number}}"
 
         });
-
-
-        $(".delLink").click(function () {
-            var id = $(this).attr("rel");
-            layer.confirm("确定要删除吗",function (index) {
-                layer.close(index);
-                $.get("/ticket/out/storage/" + id + "/del").done(function (result) {
-                    if(result.status == 'success') {
-                        history.go(0);
-                    } else {
-                        layer.msg(result.message);
-                    }
-                }).error(function () {
-                    layer.msg("系统异常")
-                });
-            })
-        });
-
-
 
 
     })

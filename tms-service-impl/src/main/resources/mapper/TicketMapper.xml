@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kaishengit.tms.mapper.TicketMapper">
   <resultMap id="BaseResultMap" type="com.kaishengit.tms.entity.Ticket">
-    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="ticket_num" jdbcType="VARCHAR" property="ticketNum" />
     <result column="ticket_in_time" jdbcType="TIMESTAMP" property="ticketInTime" />
     <result column="ticket_out_time" jdbcType="TIMESTAMP" property="ticketOutTime" />
@@ -12,7 +12,7 @@
     <result column="store_account_id" jdbcType="INTEGER" property="storeAccountId" />
     <result column="ticket_validity_start" jdbcType="TIMESTAMP" property="ticketValidityStart" />
     <result column="ticket_validity_end" jdbcType="TIMESTAMP" property="ticketValidityEnd" />
-    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -90,53 +90,40 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from ticket
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from ticket
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
-
-  <delete id="batchDelete">
-    delete from ticket
-    where id in (
-        <foreach collection="list" item="id" separator=",">
-          #{id}
-        </foreach>
-    )
-
-  </delete>
-
-
   <delete id="deleteByExample" parameterType="com.kaishengit.tms.entity.TicketExample">
     delete from ticket
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  <delete id="batchDelete">
+    delete from ticket
+    where id in (
+    <foreach collection="list" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </delete>
   <insert id="insert" parameterType="com.kaishengit.tms.entity.Ticket">
     insert into ticket (id, ticket_num, ticket_in_time, 
       ticket_out_time, ticket_state, create_time, 
       update_time, store_account_id, ticket_validity_start, 
       ticket_validity_end, customer_id)
-    values (#{id,jdbcType=BIGINT}, #{ticketNum,jdbcType=VARCHAR}, #{ticketInTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{ticketNum,jdbcType=VARCHAR}, #{ticketInTime,jdbcType=TIMESTAMP}, 
       #{ticketOutTime,jdbcType=TIMESTAMP}, #{ticketState,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{storeAccountId,jdbcType=INTEGER}, #{ticketValidityStart,jdbcType=TIMESTAMP}, 
-      #{ticketValidityEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT})
+      #{ticketValidityEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=INTEGER})
   </insert>
-
-  <insert id="batchInsert">
-    insert into ticket (ticket_num, ticket_in_time,ticket_state, create_time)
-    values
-        <foreach collection="list" item="ticket" separator=",">
-          (#{ticket.ticketNum},#{ticket.ticketInTime},#{ticket.ticketState},#{ticket.createTime})
-        </foreach>
-  </insert>
-
   <insert id="insertSelective" parameterType="com.kaishengit.tms.entity.Ticket">
     insert into ticket
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -176,7 +163,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=BIGINT},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="ticketNum != null">
         #{ticketNum,jdbcType=VARCHAR},
@@ -206,9 +193,17 @@
         #{ticketValidityEnd,jdbcType=TIMESTAMP},
       </if>
       <if test="customerId != null">
-        #{customerId,jdbcType=BIGINT},
+        #{customerId,jdbcType=INTEGER},
       </if>
     </trim>
+  </insert>
+  <insert id="batchInsert">
+    insert into ticket (ticket_num, ticket_in_time,ticket_state, create_time)
+    values
+    <foreach collection="list" item="ticket" separator=",">
+      (#{ticket.ticketNum},#{ticket.ticketInTime},#{ticket.ticketState},#{ticket.createTime})
+    </foreach>
+
   </insert>
   <select id="countByExample" parameterType="com.kaishengit.tms.entity.TicketExample" resultType="java.lang.Long">
     select count(*) from ticket
@@ -220,7 +215,7 @@
     update ticket
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.ticketNum != null">
         ticket_num = #{record.ticketNum,jdbcType=VARCHAR},
@@ -250,7 +245,7 @@
         ticket_validity_end = #{record.ticketValidityEnd,jdbcType=TIMESTAMP},
       </if>
       <if test="record.customerId != null">
-        customer_id = #{record.customerId,jdbcType=BIGINT},
+        customer_id = #{record.customerId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -259,7 +254,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update ticket
-    set id = #{record.id,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=INTEGER},
       ticket_num = #{record.ticketNum,jdbcType=VARCHAR},
       ticket_in_time = #{record.ticketInTime,jdbcType=TIMESTAMP},
       ticket_out_time = #{record.ticketOutTime,jdbcType=TIMESTAMP},
@@ -269,7 +264,7 @@
       store_account_id = #{record.storeAccountId,jdbcType=INTEGER},
       ticket_validity_start = #{record.ticketValidityStart,jdbcType=TIMESTAMP},
       ticket_validity_end = #{record.ticketValidityEnd,jdbcType=TIMESTAMP},
-      customer_id = #{record.customerId,jdbcType=BIGINT}
+      customer_id = #{record.customerId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -305,10 +300,10 @@
         ticket_validity_end = #{ticketValidityEnd,jdbcType=TIMESTAMP},
       </if>
       <if test="customerId != null">
-        customer_id = #{customerId,jdbcType=BIGINT},
+        customer_id = #{customerId,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kaishengit.tms.entity.Ticket">
     update ticket
@@ -321,7 +316,7 @@
       store_account_id = #{storeAccountId,jdbcType=INTEGER},
       ticket_validity_start = #{ticketValidityStart,jdbcType=TIMESTAMP},
       ticket_validity_end = #{ticketValidityEnd,jdbcType=TIMESTAMP},
-      customer_id = #{customerId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
+      customer_id = #{customerId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

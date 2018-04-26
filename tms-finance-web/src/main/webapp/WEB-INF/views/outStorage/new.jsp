@@ -43,7 +43,7 @@
                             <label>下发售票点</label>
                             <select name="ticketStore" class="form-control">
                                 <c:forEach items="${ticketStoreList}" var="store">
-                                    <option value="${store.id}">${store.storeName}</option>
+                                    <option value="${store.storeName}">${store.storeName}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -62,10 +62,6 @@
                         <div class="form-group">
                             <label>单价</label>
                             <input type="text" class="form-control" name="price">
-                        </div>
-                        <div class="form-group">
-                            <label>数量</label>
-                            <input type="text" class="form-control" name="totalNum">
                         </div>
 
                     </form>

@@ -7,6 +7,7 @@ import com.kaishengit.tms.entity.TicketOutRecord;
 import com.kaishengit.tms.entity.TicketStore;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 年票业务类的接口
@@ -63,4 +64,31 @@ public interface TicketService {
      * @return
      */
     List<TicketStore> findAllTicketStore();
+
+    /**
+     * 根据id删除未支付的下发
+     * @param id
+     */
+    void delTicketOutStorage(Integer id);
+
+    /**
+     * 根据当前页码和搜索参数动态查询出下发记录
+     * @param pageNo
+     * @param queryParam
+     * @return
+     */
+    PageInfo<TicketOutRecord> findTicketOutRecordByPageNoAndQueryParam(Integer pageNo, Map<String, Object> queryParam);
+
+    /**
+     * 根据id查找对应的下发记录
+     * @param id
+     * @return
+     */
+    TicketOutRecord findTicketOutRecordById(Integer id);
+
+    /**
+     * 根据id支付对应的下发
+     * @param id
+     */
+    void payTicketOutRecord(Integer id);
 }
