@@ -53,4 +53,18 @@ public interface TicketStoreService {
      * @param id
      */
     void disableStoreAccountById(Integer id);
+
+    /**
+     * 按手机号查找StoreAccount对象
+     * @param userMobile
+     * @return
+     */
+    StoreAccount findStoreAccountByMobile(String userMobile);
+
+    /**
+     * 根据手机号查找TicketStore对象
+     * @param userMobile
+     * @return
+     */
+    TicketStore findTicketStoreByStoreMobile(String userMobile);
 }

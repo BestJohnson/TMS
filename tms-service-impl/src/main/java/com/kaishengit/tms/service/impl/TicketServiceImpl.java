@@ -73,12 +73,14 @@ public class TicketServiceImpl implements TicketService {
 
         ticketInRecord.setTotalNum(totalNum.intValue());
 
-        //获取当前进行入库操作的账户
+        /*//获取当前进行入库操作的账户
         Subject subject = SecurityUtils.getSubject();
         Account account = (Account) subject.getPrincipal();
 
         ticketInRecord.setAccountName(account.getAccountName());
-        ticketInRecord.setAccountId(account.getId());
+        ticketInRecord.setAccountId(account.getId());*/
+
+
         ticketInRecord.setContent("入库：" + ticketInRecord.getBeginTicketNum() + "-" + ticketInRecord.getEndTicketNum());
         ticketInRecord.setCreateTime(new Date());
         ticketInRecordMapper.insertSelective(ticketInRecord);

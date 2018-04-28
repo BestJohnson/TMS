@@ -71,13 +71,13 @@ public class MyFilterChainDefinition  {
         ini.load(filterChainDefinitions);
 
         //从数据库中查找所有权限对象
-        List<Permission> permissionList = rolePermissionService.findAllPermission();
+//        List<Permission> permissionList = rolePermissionService.findAllPermission();
 
         Ini.Section section = ini.get(Ini.DEFAULT_SECTION_NAME);
 
-        for(Permission permission : permissionList) {
-            section.put(permission.getUrl(),"perms[" + permission.getPermissionCode() + "]");
-        }
+//        for(Permission permission : permissionList) {
+//            section.put(permission.getUrl(),"perms[" + permission.getPermissionCode() + "]");
+//        }
         section.put("/**","user");
 
         //URL和权限关系设置到shiroFilter中

@@ -1,6 +1,7 @@
 package com.kaishengit.tms.service.impl;
 
 import com.kaishengit.tms.entity.StoreAccount;
+import com.kaishengit.tms.entity.StoreAccountExample;
 import com.kaishengit.tms.entity.TicketStore;
 import com.kaishengit.tms.entity.TicketStoreExample;
 import com.kaishengit.tms.mapper.StoreAccountMapper;
@@ -145,6 +146,43 @@ public class TicketStoreServiceImpl implements TicketStoreService {
             storeAccount.setStoreState(StoreAccount.ACCOUNT_STATE_DISABLE);
             storeAccountMapper.updateByPrimaryKeySelective(storeAccount);
         }
+    }
+
+    /**
+     * 按手机号查找StoreAccount对象
+     *
+     * @param userMobile
+     * @return
+     */
+    @Override
+    public StoreAccount findStoreAccountByMobile(String userMobile) {
+        StoreAccountExample storeAccountExample = new StoreAccountExample();
+        storeAccountExample.createCriteria().andStoreAccountEqualTo(userMobile);
+
+        List<StoreAccount> storeAccountList = storeAccountMapper.selectByExample(storeAccountExample);
+
+        if(storeAccountList != null && !storeAccountList.isEmpty()) {
+            return storeAccountList.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 根据手机号查找TicketStore对象
+     *
+     * @param userMobile
+     * @return
+     */
+    @Override
+    public TicketStore findTicketStoreByStoreMobile(String userMobile) {
+        TicketStoreExample ticketStoreExample = new TicketStoreExample();
+        ticketStoreExample.createCriteria().andStoreMobileEqualTo(userMobile);
+
+        List<TicketStore> ticketStoreList = ticketStoreMapper.selectByExample(ticketStoreExample);
+        if(ticketStoreExample != null && !ticketStoreList.isEmpty()) {
+            return ticketStoreList.get(0);
+        }
+        return null;
     }
 
 
