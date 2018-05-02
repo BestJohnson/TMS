@@ -5,14 +5,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kaishengit.tms.entity.*;
 import com.kaishengit.tms.exception.ServiceException;
-import com.kaishengit.tms.mapper.TicketInRecordMapper;
-import com.kaishengit.tms.mapper.TicketMapper;
-import com.kaishengit.tms.mapper.TicketOutRecordMapper;
-import com.kaishengit.tms.mapper.TicketStoreMapper;
+import com.kaishengit.tms.mapper.*;
 import com.kaishengit.tms.service.TicketService;
+import com.kaishengit.tms.util.SnowFlake;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +34,11 @@ public class TicketServiceImpl implements TicketService {
     private TicketInRecordMapper ticketInRecordMapper;
     @Autowired
     private TicketOutRecordMapper ticketOutRecordMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+    @Autowired
+    private TicketOrderMapper ticketOrderMapper;
 
 
 
@@ -338,8 +342,155 @@ public class TicketServiceImpl implements TicketService {
 
     }
 
+    /**
+     * 统计当前销售点的票务
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Integer> countTicketByStateAndStoreAccountId(Integer id) {
+        return ticketMapper.countByStateAndStoreAccountId(id);
+    }
+
+    /**
+     * 新办理年票
+     *
+     * @param customer 客户对象
+     * @param ticketNum 年票票号
+     * @param ticketStore 销售点
+     * @param price 价格
+     */
+    @Override
+    @Transactional(rollbackFor =  RuntimeException.class)
+    public void saleTicket(Customer customer, String ticketNum, TicketStore ticketStore, Long price) {
+
+        TicketExample ticketExample = new TicketExample();
+        ticketExample.createCriteria().andTicketNumEqualTo(ticketNum);
+
+        List<Ticket> ticketList = ticketMapper.selectByExample(ticketExample);
+
+        if(ticketList != null && !ticketList.isEmpty()) {
+            Ticket ticket = ticketList.get(0);
+            //先查看给票号是否是已下发
+            if(Ticket.TICKET_STATE_OUT_STORE.equals(ticket.getTicketState())) {
+                //判断该年票是否属于该销售点
+                if(ticket.getStoreAccountId().equals(ticketStore.getId())) {
 
 
+
+
+                    //判断客户是否办理过年票；办理过，且年票可用，则不让办理；其他情况允许办理，但是只有新版年票可用
+                    CustomerExample customerExample = new CustomerExample();
+                    customerExample.createCriteria().andCustomerIdcardEqualTo(customer.getCustomerIdcard());
+                    List<Customer> customerList = customerMapper.selectByExample(customerExample);
+
+                    if(customerList != null && !customerList.isEmpty()) {
+                        Customer existCustomer = customerList.get(0);
+                        Ticket ticket1 = ticketMapper.selectByPrimaryKey(existCustomer.getTicketId());
+
+                        if(ticket1 != null && ticket1.getTicketState().equals(Ticket.TICKET_STATE_OUT_STORE)) {
+                            throw new ServiceException("客户已办理过年票，请勿重复办理");
+                        } else {
+                            customer = existCustomer;
+                        }
+
+                    } else {
+
+                        customer.setTicketId(ticket.getId());;
+                        customer.setCreateTime(new Date());;
+
+                        customerMapper.insertSelective(customer);
+
+                    }
+
+
+                    //修改年票为已销售状态
+                    ticket.setTicketState(Ticket.TICKET_STATE_SALE);
+                    ticket.setTicketValidityStart(new Date());
+                    DateTime endDate = DateTime.now().plusYears(1);
+                    ticket.setTicketValidityEnd(endDate.toDate());
+                    ticket.setCustomerId(customer.getId());
+
+                    ticketMapper.updateByPrimaryKeySelective(ticket);
+
+                    //创建销售订单
+                    TicketOrder ticketOrder = new TicketOrder();
+                    ticketOrder.setCreateTime(new Date());
+                    ticketOrder.setCustomerId(customer.getId());
+                    ticketOrder.setTicketStoreId(ticketStore.getId());
+                    ticketOrder.setTicketId(ticket.getId());
+
+                    //数据库中price设计成decimal，为什么生成的实体类里面就成了Long？？还有，怎么把Bigdecimal转成Long？？
+                    //这里是把原来price的Bigdecimal类型改成Long了
+                    ticketOrder.setPrice(price);
+
+                    //流水号
+                    //SnowFlake snowFlake = new SnowFlake();
+
+                    ticketOrder.setTicketOrderType(TicketOrder.ORDER_TYPE_NEW);
+
+                    ticketOrderMapper.insertSelective(ticketOrder);
+
+
+
+                }else {
+                    throw new ServiceException("该年票不属于当前销售点，请仔细核对");
+                }
+
+            } else {
+                throw new ServiceException("该年票不能办理，请检查年票状态");
+            }
+
+
+        } else {
+            throw new ServiceException("该票号不存在，请重新检查");
+        }
+
+
+    }
+
+    /**
+     * 年票挂失
+     *
+     * @param ticketNum
+     * @param customerIdcard
+     */
+    @Override
+    public void lostTicket(String ticketNum, String customerIdcard) {
+        TicketExample ticketExample = new TicketExample();
+        ticketExample.createCriteria().andTicketNumEqualTo(ticketNum);
+        List<Ticket> ticketList = ticketMapper.selectByExample(ticketExample);
+
+        if(ticketList !=null && !ticketList.isEmpty()) {
+            Ticket ticket = ticketList.get(0);
+
+            CustomerExample customerExample = new CustomerExample();
+            customerExample.createCriteria().andCustomerIdcardEqualTo(customerIdcard);
+            List<Customer> customerList = customerMapper.selectByExample(customerExample);
+
+            if(customerList != null && !customerList.isEmpty()) {
+                Customer customer = customerList.get(0);
+
+                if(ticket.getCustomerId().equals(customer.getId())) {
+
+                    //写到这里了
+
+                } else {
+                    throw new ServiceException("票号和客户身份证不匹配");
+                }
+
+            } else {
+                throw new ServiceException("客户身份证号码有误，请检查");
+            }
+
+
+        } else {
+            throw new ServiceException("票号有误，请检查");
+        }
+
+
+    }
 
 
 }

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaishengit.tms.mapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.kaishengit.tms.entity.Customer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="customer_mobile" jdbcType="VARCHAR" property="customerMobile" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="customer_idcard" jdbcType="VARCHAR" property="customerIdcard" />
+    <result column="ticket_id" jdbcType="INTEGER" property="ticketId" />
+    <result column="customer_idcard_photo" jdbcType="VARCHAR" property="customerIdcardPhoto" />
+    <result column="customer_idcard_photo_back" jdbcType="VARCHAR" property="customerIdcardPhotoBack" />
+    <result column="customer_photo" jdbcType="VARCHAR" property="customerPhoto" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, customer_name, sex, customer_mobile, address, customer_idcard, ticket_id, customer_idcard_photo, 
+    customer_idcard_photo_back, customer_photo, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.kaishengit.tms.entity.CustomerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kaishengit.tms.entity.CustomerExample">
+    delete from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kaishengit.tms.entity.Customer">
+    insert into customer (id, customer_name, sex, 
+      customer_mobile, address, customer_idcard, 
+      ticket_id, customer_idcard_photo, customer_idcard_photo_back, 
+      customer_photo, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{customerName,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{customerMobile,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{customerIdcard,jdbcType=VARCHAR}, 
+      #{ticketId,jdbcType=INTEGER}, #{customerIdcardPhoto,jdbcType=VARCHAR}, #{customerIdcardPhotoBack,jdbcType=VARCHAR}, 
+      #{customerPhoto,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kaishengit.tms.entity.Customer" useGeneratedKeys="true" keyProperty="id">
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="customerMobile != null">
+        customer_mobile,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="customerIdcard != null">
+        customer_idcard,
+      </if>
+      <if test="ticketId != null">
+        ticket_id,
+      </if>
+      <if test="customerIdcardPhoto != null">
+        customer_idcard_photo,
+      </if>
+      <if test="customerIdcardPhotoBack != null">
+        customer_idcard_photo_back,
+      </if>
+      <if test="customerPhoto != null">
+        customer_photo,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="customerMobile != null">
+        #{customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdcard != null">
+        #{customerIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null">
+        #{ticketId,jdbcType=INTEGER},
+      </if>
+      <if test="customerIdcardPhoto != null">
+        #{customerIdcardPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdcardPhotoBack != null">
+        #{customerIdcardPhotoBack,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoto != null">
+        #{customerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kaishengit.tms.entity.CustomerExample" resultType="java.lang.Long">
+    select count(*) from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update customer
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerName != null">
+        customer_name = #{record.customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerMobile != null">
+        customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerIdcard != null">
+        customer_idcard = #{record.customerIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketId != null">
+        ticket_id = #{record.ticketId,jdbcType=INTEGER},
+      </if>
+      <if test="record.customerIdcardPhoto != null">
+        customer_idcard_photo = #{record.customerIdcardPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerIdcardPhotoBack != null">
+        customer_idcard_photo_back = #{record.customerIdcardPhotoBack,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerPhoto != null">
+        customer_photo = #{record.customerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update customer
+    set id = #{record.id,jdbcType=INTEGER},
+      customer_name = #{record.customerName,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      customer_mobile = #{record.customerMobile,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      customer_idcard = #{record.customerIdcard,jdbcType=VARCHAR},
+      ticket_id = #{record.ticketId,jdbcType=INTEGER},
+      customer_idcard_photo = #{record.customerIdcardPhoto,jdbcType=VARCHAR},
+      customer_idcard_photo_back = #{record.customerIdcardPhotoBack,jdbcType=VARCHAR},
+      customer_photo = #{record.customerPhoto,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kaishengit.tms.entity.Customer">
+    update customer
+    <set>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="customerMobile != null">
+        customer_mobile = #{customerMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdcard != null">
+        customer_idcard = #{customerIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null">
+        ticket_id = #{ticketId,jdbcType=INTEGER},
+      </if>
+      <if test="customerIdcardPhoto != null">
+        customer_idcard_photo = #{customerIdcardPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIdcardPhotoBack != null">
+        customer_idcard_photo_back = #{customerIdcardPhotoBack,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPhoto != null">
+        customer_photo = #{customerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kaishengit.tms.entity.Customer">
+    update customer
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      customer_mobile = #{customerMobile,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      customer_idcard = #{customerIdcard,jdbcType=VARCHAR},
+      ticket_id = #{ticketId,jdbcType=INTEGER},
+      customer_idcard_photo = #{customerIdcardPhoto,jdbcType=VARCHAR},
+      customer_idcard_photo_back = #{customerIdcardPhotoBack,jdbcType=VARCHAR},
+      customer_photo = #{customerPhoto,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

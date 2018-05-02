@@ -124,7 +124,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{storeAccountId,jdbcType=INTEGER}, #{ticketValidityStart,jdbcType=TIMESTAMP}, 
       #{ticketValidityEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.kaishengit.tms.entity.Ticket">
+  <insert id="insertSelective" parameterType="com.kaishengit.tms.entity.Ticket" useGeneratedKeys="true" keyProperty="id">
     insert into ticket
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -211,6 +211,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+  <select id="countByStateAndStoreAccountId">
+    select
+        count(*) ,
+        count(case when ticket_state = '已下发' then 1 end),
+        count(case when ticket_state = '已销售' then 1 end),
+        count(case when ticket_state = '已挂失' then 1 end),
+        count(case when ticket_state = '已过期' then 1 end)
+    from ticket
+    where store_account_id = #{storeAccountId}
+
+  </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     update ticket
     <set>

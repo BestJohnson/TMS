@@ -27,6 +27,9 @@ import java.util.Map;
 public class HomeController {
 
     @Autowired
+    private TicketService ticketService;
+
+    @Autowired
     private ShiroUtils shiroUtils;
 
     /**
@@ -89,8 +92,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Model model) {
         TicketStore ticketStore = shiroUtils.getCurrentAccount();
+
+
         //查询当前售票点库存年票数量和已售出年票数量
-        Map<String,Long> countResult =null; //ticketService.countTicketByStateAndStoreAccountId(ticketStore.getId());
+        Map<String,Integer> countResult = ticketService.countTicketByStateAndStoreAccountId(ticketStore.getId());
 
         model.addAttribute("resultMap",countResult);
         return "home";

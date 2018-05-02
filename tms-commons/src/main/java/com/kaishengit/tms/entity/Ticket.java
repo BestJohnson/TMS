@@ -12,6 +12,7 @@ public class Ticket implements Serializable {
     public static final String TICKET_STATE_OUT_STORE = "已下发";
     public static final String TICKET_STATE_MISS = "已挂失";
     public static final String TICKET_STATE_DISABLED = "已作废";
+    public static final String TICKET_STATE_SALE = "已销售";
 
 
     private Integer id;

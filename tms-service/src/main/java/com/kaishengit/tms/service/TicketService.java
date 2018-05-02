@@ -2,10 +2,12 @@ package com.kaishengit.tms.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.kaishengit.tms.entity.Customer;
 import com.kaishengit.tms.entity.TicketInRecord;
 import com.kaishengit.tms.entity.TicketOutRecord;
 import com.kaishengit.tms.entity.TicketStore;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -91,4 +93,27 @@ public interface TicketService {
      * @param id
      */
     void payTicketOutRecord(Integer id);
+
+    /**
+     * 统计当前销售点的票务
+     * @param id
+     * @return
+     */
+    Map<String,Integer> countTicketByStateAndStoreAccountId(Integer id);
+
+    /**
+     * 新办理年票
+     * @param customer
+     * @param ticketNum
+     * @param ticketStore
+     * @param price
+     */
+    void saleTicket(Customer customer, String ticketNum, TicketStore ticketStore, Long price);
+
+    /**
+     * 年票挂失
+     * @param ticketNum
+     * @param customerIdcard
+     */
+    void lostTicket(String ticketNum, String customerIdcard);
 }
